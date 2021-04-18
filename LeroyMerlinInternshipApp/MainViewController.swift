@@ -16,9 +16,20 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
     var dataSource: UICollectionViewDiffableDataSource<Section, Item>?
     
     var headerView: UIView!
+    var headerViewHeightAnchor: NSLayoutConstraint!
+    
+    var last: CGFloat = -220
+    
+    
+    var searchBar: UITextField!
+    var leadingConstraint: NSLayoutConstraint!
+    var searchBarBottomAnchor: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupHeader()
+        setupSearchField()
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -28,8 +39,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         collectionView.register(ItemCell.self, forCellWithReuseIdentifier: ItemCell.reusableIdentifier)
         collectionView.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.reusableIdentifier)
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reusableIdentifier)
-        
-        setupHeader()
         
         collectionView.delegate = self
         
@@ -47,46 +56,79 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         headerView.backgroundColor = .green
         headerView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 200)
         
-        let searchLabel = UILabel()
-        searchLabel.text = "Поиск товаров"
-        searchLabel.textColor = .white
-        searchLabel.textAlignment = .left
-        searchLabel.font = UIFontMetrics.default.scaledFont(for: UIFont.systemFont(ofSize: 32, weight: .bold))
+        headerView.backgroundColor = .green
+        headerView.layer.zPosition = 100
         
-        let searchField = UITextField()
-        searchField.placeholder = "Поиск"
-        searchField.backgroundColor = .white
-        searchField.layer.cornerRadius = 5
+        let titleLabel = UILabel()
+        titleLabel.text = "Поиск товаров"
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .left
+        titleLabel.font = UIFontMetrics.default.scaledFont(for: UIFont.systemFont(ofSize: 32, weight: .bold))
         
-        let barcodeButton = UIButton(type: .roundedRect)
+        let searchView = UIView()
+        searchView.backgroundColor = .white
+        searchView.layer.cornerRadius = 5
+        
+        let barcodeButton = UIButton()
         barcodeButton.backgroundColor = .white
         
+        headerView.translatesAutoresizingMaskIntoConstraints = false
         barcodeButton.translatesAutoresizingMaskIntoConstraints = false
-        searchLabel.translatesAutoresizingMaskIntoConstraints = false
-        searchField.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        searchView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(headerView)
-        headerView.addSubview(searchLabel)
-        headerView.addSubview(searchField)
+        headerView.addSubview(titleLabel)
+        headerView.addSubview(searchView)
         headerView.addSubview(barcodeButton)
 
-        
+        headerViewHeightAnchor = headerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.35)
         NSLayoutConstraint.activate([
+            
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerViewHeightAnchor,
             
             barcodeButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -30),
             barcodeButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -15),
-            barcodeButton.widthAnchor.constraint(equalToConstant: 40),
+            barcodeButton.widthAnchor.constraint(equalToConstant: Dimensions.searchBarHeight),
             barcodeButton.heightAnchor.constraint(equalTo: barcodeButton.widthAnchor),
             
-            searchField.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -30),
-            searchField.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 10),
-            searchField.trailingAnchor.constraint(equalTo: barcodeButton.leadingAnchor, constant: -20),
-            searchField.heightAnchor.constraint(equalToConstant: 40),
+            searchView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -30),
+            searchView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 10),
+            searchView.trailingAnchor.constraint(equalTo: barcodeButton.leadingAnchor, constant: -20),
+            searchView.heightAnchor.constraint(equalToConstant: Dimensions.searchBarHeight),
             
-            
-            searchLabel.bottomAnchor.constraint(equalTo: searchField.topAnchor, constant: -10),
-            searchLabel.widthAnchor.constraint(equalTo: headerView.widthAnchor, constant: -30),
-            searchLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor)
+            titleLabel.bottomAnchor.constraint(equalTo: searchView.topAnchor, constant: -10),
+            titleLabel.widthAnchor.constraint(equalTo: headerView.widthAnchor, constant: -30),
+            titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+        ])
+        Dimensions.headerViewHeight = headerView.frame.size.height
+    }
+    
+    func setupSearchField() {
+        searchBar = UITextField()
+        searchBar.placeholder = "Поиск"
+        searchBar.layer.cornerRadius = 3
+                
+        searchBar.backgroundColor = .white
+        
+        searchBar.layer.zPosition = 101
+        
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchBar)
+        
+        leadingConstraint = searchBar.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 10)
+        searchBarBottomAnchor = searchBar.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -30)
+        searchBarBottomAnchor.priority = UILayoutPriority(10)
+        
+        NSLayoutConstraint.activate([
+            leadingConstraint,
+            searchBarBottomAnchor,
+            searchBar.heightAnchor.constraint(equalToConstant: Dimensions.searchBarHeight),
+            searchBar.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 20),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30 - Dimensions.searchBarHeight)
         ])
     }
     
@@ -110,11 +152,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         }
         
         dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
-            guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reusableIdentifier, for: indexPath) as? SectionHeader else {
+            
+         guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reusableIdentifier, for: indexPath) as? SectionHeader else {
                 return nil
             }
             sectionHeader.titleLabel.text = self?.sections[indexPath.section].title
-
+           
             return sectionHeader
         }
     }
@@ -179,8 +222,31 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let height = scrollView.contentOffset.y
-        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: -height)
+        let delta = height - last
+        
+        headerViewHeightAnchor.constant -= delta
+        
+        
+        if headerView.frame.size.height <= Dimensions.headerViewHeight * 0.85 && headerView.frame.size.height >= Dimensions.headerViewHeight * 0.6 {
+            if leadingConstraint.constant < 0 {
+                leadingConstraint.constant = 0
+            }
+            if leadingConstraint.constant > 10 {
+                leadingConstraint.constant = 10
+            }
+            leadingConstraint.constant -= delta/5
+        }
+        
+        if height < 0 {
+            headerView.alpha = -height/120 - 1
+        }
+        
+        
+        last = height
     }
-    
-    
+}
+
+struct Dimensions {
+    static var headerViewHeight: CGFloat = 0
+    static let searchBarHeight: CGFloat = 45
 }

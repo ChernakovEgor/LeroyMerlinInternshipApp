@@ -19,19 +19,19 @@ class TabBarViewController: UITabBarController {
         
         let image = UIImage(systemName: "circle")
         
-        let tabItem = UITabBarItem(title: "main", image: image, selectedImage: image)
+        let tabItem = UITabBarItem(title: "Главная", image: image, selectedImage: image)
         
         vc.tabBarItem = tabItem
         
         return vc
     }()
     
-    lazy var mainViewController2: MainViewController = {
-        let vc = MainViewController()
+    lazy var mainViewController2: UIViewController = {
+        let vc = UIViewController()
         
         let image = UIImage(systemName: "square")
         
-        let tabItem = UITabBarItem(title: "main", image: image, selectedImage: image)
+        let tabItem = UITabBarItem(title: "Мой список", image: image, selectedImage: image)
         
         vc.tabBarItem = tabItem
         
