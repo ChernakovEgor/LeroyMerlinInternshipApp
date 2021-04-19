@@ -18,12 +18,11 @@ class ItemCell: UICollectionViewCell, SelfConfiguringCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        priceLabel.font = priceLabel.font.withSize(20)
+        //priceLabel.font = priceLabel.font.withSize(20)
+        titleLabel.numberOfLines = 2
         
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        //backgroundColor = .red
         
         let stackView = UIStackView(arrangedSubviews: [imageView, priceLabel, titleLabel])
         stackView.axis = .vertical
@@ -38,13 +37,17 @@ class ItemCell: UICollectionViewCell, SelfConfiguringCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         
-        imageView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.7).isActive = true
+        imageView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6).isActive = true
         
     }
     
     func configure(for item: Item) {
+        let attributedString = NSMutableAttributedString(string: "\(item.price) ₽/шт.")
+        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 20), range: NSRange(location: 0, length: attributedString.length-5))
+        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 15), range: NSRange(location: attributedString.length-5, length: 5))
         titleLabel.text = item.title
-        priceLabel.text = "\(item.price) ₽/шт."
+        priceLabel.attributedText = attributedString
+        titleLabel.sizeToFit()
         imageView.image = item.image
     }
     

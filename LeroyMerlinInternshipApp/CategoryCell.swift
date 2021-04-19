@@ -16,30 +16,59 @@ class CategoryCell: UICollectionViewCell, SelfConfiguringCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        layer.cornerRadius = 5
+        
+        //titleLabel.frame = CGRect(x: 15, y: 15, width: width-20, height: 20)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        //backgroundColor = .red
-        
-        let stackView = UIStackView(arrangedSubviews: [imageView, titleLabel])
-        stackView.axis = .vertical
-        stackView.alignment = .top
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(stackView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(imageView)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -10)
         ])
-        
-        imageView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.7).isActive = true
     }
     
     func configure(for item: Item) {
         titleLabel.text = item.title
-        imageView.image = item.image
+    
+        let width = contentView.frame.size.width
+        
+        if item.title == "Каталог" {
+            backgroundColor = Dimensions.color
+            titleLabel.textColor = .white
+            imageView.image = UIImage(systemName: "list.dash")
+            imageView.tintColor = .white
+            
+            imageView.frame = CGRect(x: width / 2, y: width / 2, width: width / 2, height: width / 2)
+        } else if item.title == "Смотреть всё" {
+            backgroundColor = .systemGray6
+            titleLabel.textColor = .black
+            titleLabel.sizeToFit()
+            imageView.image = UIImage(systemName: "arrow.right.circle")
+            imageView.tintColor = Dimensions.color
+            
+            imageView.frame = CGRect(x: width / 3, y: width / 2.5, width: width / 3 , height: width / 3 )
+        } else {
+            backgroundColor = .systemGray6
+            titleLabel.textColor = .black
+            titleLabel.sizeToFit()
+            imageView.image = item.image
+            imageView.tintColor = .none
+            
+            imageView.frame = CGRect(x: width / 3, y: width / 3, width: width , height: width )
+            let maskView = UIView(frame: CGRect(x: 0, y: 0, width: width * 2 / 3, height: width * 2 / 3))
+            maskView.layer.cornerRadius = layer.cornerRadius
+            maskView.backgroundColor = .blue
+            imageView.mask = maskView
+        }
     }
     
     required init?(coder: NSCoder) {

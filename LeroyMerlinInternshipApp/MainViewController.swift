@@ -18,7 +18,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
     var headerView: UIView!
     var headerViewHeightAnchor: NSLayoutConstraint!
     
-    var last: CGFloat = -220
+    var last: CGFloat = -Dimensions.scrollInset - 20
     
     
     var searchBar: UITextField!
@@ -36,6 +36,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositionalLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .systemBackground
+        
         view.addSubview(collectionView)
         
         collectionView.register(ItemCell.self, forCellWithReuseIdentifier: ItemCell.reusableIdentifier)
@@ -48,17 +49,14 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         createDataSource()
         reloadData()
         
-        collectionView.contentInset.top = 200
+        collectionView.contentInset.top = Dimensions.scrollInset
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        
     }
     
     func setupHeader() {
         headerView = UIView()
         headerView.backgroundColor = .green
-        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 200)
-        
         headerView.backgroundColor = Dimensions.color
         headerView.layer.zPosition = 10
         
@@ -98,7 +96,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         headerView.addSubview(barcodeButton)
         headerView.addSubview(searchButton)
 
-        headerViewHeightAnchor = headerView.heightAnchor.constraint(equalToConstant: 250)
+        headerViewHeightAnchor = headerView.heightAnchor.constraint(equalToConstant: Dimensions.scrollInset)
         NSLayoutConstraint.activate([
             
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -125,7 +123,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
             searchButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -35),
             searchButton.trailingAnchor.constraint(equalTo: barcodeButton.leadingAnchor, constant: -25),
         ])
-        Dimensions.headerViewHeight = headerView.frame.size.height
+        //Dimensions.headerViewHeight = headerView.frame.size.height
     }
     
     func setupSearchField() {
@@ -166,6 +164,16 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         ])
     }
     
+    func setupRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        collectionView.refreshControl = refreshControl
+        view.addSubview(refreshControl)
+        collectionView.refreshControl?.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.refreshControl?.layer.zPosition = 300
+        collectionView.refreshControl?.topAnchor.constraint(equalTo: collectionView.topAnchor, constant: -30).isActive = true
+        collectionView.refreshControl?.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
+        
+    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let height = scrollView.contentOffset.y
@@ -173,8 +181,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         
         headerViewHeightAnchor.constant -= delta
         
-        
-        if headerView.frame.size.height <= Dimensions.headerViewHeight * 0.9 && headerView.frame.size.height >= Dimensions.headerViewHeight * 0.6 {
+        if headerView.frame.size.height <= Dimensions.scrollInset * 0.8 && headerView.frame.size.height >= Dimensions.scrollInset * 0.6 {
             if leadingConstraint.constant < 0 {
                 leadingConstraint.constant = 0
             }
@@ -185,7 +192,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate {
         }
         
         if height < 0 {
-            headerView.alpha = -height/110 - 1
+            headerView.alpha = -height/((Dimensions.scrollInset + 20)/3) - 2
         }
         
         if searchBar.frame.minY == 20.0 {
@@ -256,28 +263,31 @@ extension MainViewController {
             let section = self.sections[sectionIndex]
 
             switch section.type {
+            case "categories":
+                return self.createCategoriesSection(using: section)
             default:
-                return self.createBestSection(using: section)
+                return self.createItemSection(using: section)
             }
         }
 
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.interSectionSpacing = 20
+        config.interSectionSpacing = 30
         layout.configuration = config
         return layout
     }
     
-    func createBestSection(using section: Section) -> NSCollectionLayoutSection {
+    func createItemSection(using section: Section) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0)
         
-        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .estimated(150))
+        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .estimated(180))
         let layoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: layoutGroupSize, subitems: [layoutItem])
         
         let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
         layoutSection.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+        
         
         let layoutSectionHeader = createSectionHeader()
         layoutSection.boundarySupplementaryItems = [layoutSectionHeader]
@@ -286,6 +296,25 @@ extension MainViewController {
             let footer = createSectionFooter()
             layoutSection.boundarySupplementaryItems.append(footer)
         }
+        
+        return layoutSection
+    }
+    
+    func createCategoriesSection(using section: Section) -> NSCollectionLayoutSection {
+        let edge = (view.frame.width) / 2.5
+        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(edge), heightDimension: .absolute(edge))
+        
+        let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0)
+        
+        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .estimated(150))
+        let layoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: layoutGroupSize, subitems: [layoutItem])
+        
+        let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
+        layoutSection.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+        
+//        let layoutSectionHeader = createSectionHeader()
+//        layoutSection.boundarySupplementaryItems = [layoutSectionHeader]
         
         return layoutSection
     }
@@ -312,7 +341,7 @@ extension MainViewController {
 }
 
 struct Dimensions {
-    static var headerViewHeight: CGFloat = 0
     static let searchBarHeight: CGFloat = 45
     static let color = UIColor(red: 83.0/255.0, green: 210.0/255.0, blue: 64.0/255.0, alpha: 1)
+    static let scrollInset: CGFloat = 220
 }
