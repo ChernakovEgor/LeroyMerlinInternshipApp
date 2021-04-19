@@ -1,12 +1,15 @@
 # LeroyMerlinInternshipApp
-Demo app for applying to Leroy Merlin IOS internship.
+Тестовое задание для Leroy Merlin
 
-## Что получилось
+## Опыт
+На первый взгляд задание показалось не сложным, но как обычно бывает во время выполнения 
+
+### Что получилось
 
 - Не использовать StoryBoard 
 - Compositional Layout
 - Анимация
 
-## Что *не* получилось
-- Refresh Control: из-за того, что шапка headerView распологается поверх collectionView, не виден кругляшок загрузки;
-- Строка поиска не реагирует на касания;
+### Что *не* получилось
+- Refresh Control: из-за того, что шапка headerView распологается поверх collectionView, не виден кругляшок загрузки
+- Поле поиска не реагирует на касания
