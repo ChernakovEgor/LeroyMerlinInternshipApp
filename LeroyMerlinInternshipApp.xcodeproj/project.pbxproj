@@ -19,6 +19,7 @@
 		74B13666262C16A10022060C /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B13665262C16A10022060C /* SectionHeader.swift */; };
 		74B13669262C23410022060C /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B13668262C23410022060C /* CategoryCell.swift */; };
 		74B1366D262C53460022060C /* MainHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B1366C262C53460022060C /* MainHeader.swift */; };
+		74B13670262D67040022060C /* SectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B1366F262D67040022060C /* SectionFooter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		74B13665262C16A10022060C /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		74B13668262C23410022060C /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		74B1366C262C53460022060C /* MainHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHeader.swift; sourceTree = "<group>"; };
+		74B1366F262D67040022060C /* SectionFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionFooter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				741FD1C62629A3F50073679A /* MainViewController.swift */,
 				74B1366C262C53460022060C /* MainHeader.swift */,
 				74B13665262C16A10022060C /* SectionHeader.swift */,
+				74B1366F262D67040022060C /* SectionFooter.swift */,
 				74B13662262ACE8D0022060C /* SelfConfiguringCell.swift */,
 				74B1365E262AC8DA0022060C /* ItemCell.swift */,
 				741FD1CD2629B5080073679A /* Data.swift */,
@@ -155,6 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74B13663262ACE8D0022060C /* SelfConfiguringCell.swift in Sources */,
+				74B13670262D67040022060C /* SectionFooter.swift in Sources */,
 				741FD1CB2629A68E0073679A /* TabBarViewController.swift in Sources */,
 				741FD1CE2629B5080073679A /* Data.swift in Sources */,
 				74B1365F262AC8DA0022060C /* ItemCell.swift in Sources */,
