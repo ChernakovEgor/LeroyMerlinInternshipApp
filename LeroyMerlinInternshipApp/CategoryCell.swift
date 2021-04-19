@@ -18,7 +18,6 @@ class CategoryCell: UICollectionViewCell, SelfConfiguringCell {
         
         layer.cornerRadius = 5
         
-        //titleLabel.frame = CGRect(x: 15, y: 15, width: width-20, height: 20)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping

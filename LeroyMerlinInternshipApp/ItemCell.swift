@@ -18,7 +18,6 @@ class ItemCell: UICollectionViewCell, SelfConfiguringCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        //priceLabel.font = priceLabel.font.withSize(20)
         titleLabel.numberOfLines = 2
         
         imageView.contentMode = .scaleAspectFit
@@ -38,7 +37,6 @@ class ItemCell: UICollectionViewCell, SelfConfiguringCell {
         ])
         
         imageView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6).isActive = true
-        
     }
     
     func configure(for item: Item) {

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 struct Section: Hashable {
-    //let id: Int
+    
     let title: String
     let type: String
     let items: [Item]
@@ -23,6 +23,7 @@ struct Section: Hashable {
 }
 
 struct Item: Hashable {
+    
     let id: String
     let title: String
     let price: Int
