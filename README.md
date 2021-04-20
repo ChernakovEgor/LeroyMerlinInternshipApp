@@ -11,7 +11,8 @@
 - Анимация
 
 ### Что не получилось
-- Refresh Control: из-за того, что шапка headerView распологается поверх collectionView, не виден кругляшок загрузки
-- Поле поиска не реагирует на касания
+- ~~Refresh Control: из-за того, что шапка headerView распологается поверх collectionView, не виден кругляшок загрузки~~ 
+- ~~Поле поиска не реагирует на касания~~
+После небольшого переосмысления шапки обе проеблмы удалось решить.
 
 ![alt text](https://github.com/ChernakovEgor/LeroyMerlinInternshipApp/blob/main/screenshot.png)
