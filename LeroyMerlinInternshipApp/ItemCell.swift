@@ -9,7 +9,7 @@ import UIKit
 
 class ItemCell: UICollectionViewCell, SelfConfiguringCell {
     
-    static let reusableIdentifier = "ItemCell"
+    static let reuseIdentifier = "ItemCell"
     
     let titleLabel = UILabel()
     let priceLabel = UILabel()

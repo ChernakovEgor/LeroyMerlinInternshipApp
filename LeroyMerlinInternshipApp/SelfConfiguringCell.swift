@@ -8,6 +8,6 @@
 import Foundation
 
 protocol SelfConfiguringCell {
-    static var reusableIdentifier: String { get }
+    static var reuseIdentifier: String { get }
     func configure(for item: Item)
 }

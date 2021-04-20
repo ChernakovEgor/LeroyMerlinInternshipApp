@@ -8,7 +8,7 @@
 import UIKit
 
 class CategoryCell: UICollectionViewCell, SelfConfiguringCell {
-    static var reusableIdentifier = "CategoryCell"
+    static var reuseIdentifier = "CategoryCell"
     
     let titleLabel = UILabel()
     let imageView = UIImageView()
